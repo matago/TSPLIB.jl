@@ -1,5 +1,5 @@
 module TSPLIB
 
-# package code goes here
+include("distances.jl")
 
 end # module
