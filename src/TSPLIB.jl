@@ -6,7 +6,8 @@ module TSPLIB
 
   export readTSP
 
-  include("distances.jl")
   include("readTSP.jl")
+  include("distances.jl")
+  include("utils.jl")
 
 end # module
