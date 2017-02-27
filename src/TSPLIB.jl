@@ -1,5 +1,11 @@
 module TSPLIB
+  using DataStructures
+  using Match
 
-include("distances.jl")
+
+  export readTSP
+
+  include("distances.jl")
+  include("readTSP.jl")
 
 end # module
