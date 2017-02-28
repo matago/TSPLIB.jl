@@ -1,4 +1,36 @@
 
+const tsp_pth = joinpath(Pkg.dir("TSPLIB"),"data","TSPLIB95","tsp")
+
+const tsp_keys = ["NAME", "TYPE", "COMMENT", "DIMENSION", "EDGE_WEIGHT_TYPE",
+                  "EDGE_WEIGHT_FORMAT", "EDGE_DATA_FORMAT", "NODE_COORD_TYPE",
+                  "DISPLAY_DATA_TYPE", "NODE_COORD_SECTION", "DEPOT_SECTION",
+                  "DEMAND_SECTION", "EDGE_DATA_SECTION", "FIXED_EDGES_SECTION",
+                  "DISPLAY_DATA_SECTION", "TOUR_SECTION", "EDGE_WEIGHT_SECTION",
+                  "EOF"]
+
+_readTSP(pth::String) = readstring(pth)
+_readTSP(pth::Symbol) = readstring(joinpath(tsp_pth,string(pth)*".tsp"))
+
+function extract(raw::String,ks::Array{String})
+  pq = PriorityQueue{String,Tuple{Integer,Integer},Base.Order.ForwardOrdering}()
+  vals = Dict()
+  for k in ks
+    idx = search(raw,k)
+    length(idx) > 0 && enqueue!(pq,k,extrema(idx))
+  end
+  while length(pq) > 1
+    s_key, s_pts = peek(pq)
+    dequeue!(pq)
+    f_key, f_pts = peek(pq)
+    rng = (s_pts[2]+1):(f_pts[1]-1)
+    vals[s_key] = strip(replace(_raw[rng],":",""))
+  end
+  return vals
+end
+
+function extract
+
+
 function readTSP(file_path::String)
   _raw = readstring(file_path)
   tsp_keys = ["NAME",
@@ -39,7 +71,7 @@ function readTSP(file_path::String)
     _rng = (s_pts[2]+1):(f_pts[1]-1)
     _dict[s_key] = strip(replace(_raw[_rng],":",""))
   end
-  #convert dimension to Int64 & clean "TYPE"
+  #convert dimension to Integer & clean "TYPE"
   n_dim = _dict["DIMENSION"] =  convert(Int64,float(_dict["DIMENSION"]))
   _dict["TYPE"] = split(_dict["TYPE"])[1]
   #=
@@ -70,3 +102,7 @@ function readTSP(file_path::String)
   end
   return _dict
 end
+
+_readTSP(pth::String) = readstring(pth)
+
+_readTSP(pth::Symbol) = readstring(joinpath(tsp_pth,String(pth)))
