@@ -79,7 +79,7 @@ end
 function calc_weights(key::AbstractString,data::Matrix)
   w = @match key begin
     "EUC_2D" => euclidian(data[:,1], data[:,2])
-    "GEO" => haversine(data[:,1], data[:,2])
+    "GEO" => geo(data[:,1], data[:,2])
     "ATT" => att_euclidian(data[:,1], data[:,2])
     "CEIL_2D" => ceil_euclidian(data[:,1], data[:,2])
   end
