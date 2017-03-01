@@ -41,7 +41,7 @@ function ceil_euclidian{T<:Real}(x::Vector{T},y::Vector{T})
   return dist
 end
 
-function haversine{T<:Real}(x::Vector{T},y::Vector{T})
+function geo{T<:Real}(x::Vector{T},y::Vector{T})
   const PI = 3.141592
   const RRR = 6378.388
   const nsz = length(x)
