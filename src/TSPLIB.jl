@@ -4,9 +4,9 @@ module TSPLIB
   #test
 
 
-  export readTSP
+  export TSP, readTSP, readTSPLIB
 
-  include("readTSP.jl")
+  include("reader.jl")
   include("distances.jl")
   include("utils.jl")
 
