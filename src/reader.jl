@@ -5,6 +5,8 @@ type TSP
   weight_type::AbstractString
   weights::Matrix
   nodes::Matrix
+  ffx::Function
+  pfx::Function
 end
 
 const tsplib_path = joinpath(Pkg.dir("TSPLIB"),"data","TSPLIB95","tsp")
@@ -44,7 +46,11 @@ function _generateTSP(raw::AbstractString)
     nodes = reshape(coords,(n_r,dimension))'[:,2:end]
     weights = calc_weights(_dict["EDGE_WEIGHT_TYPE"],nodes)
   end
-  TSP(name,dimension,weight_type,weights,nodes)
+
+  fFX = fullFit(weights)
+  pFX = partFit(weights)
+
+  TSP(name,dimension,weight_type,weights,nodes,fFX,pFX)
 end
 
 function keyextract{T<:AbstractString}(raw::T,ks::Array{T})
