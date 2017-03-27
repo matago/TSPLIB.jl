@@ -38,7 +38,7 @@ function _generateTSP(raw::AbstractString)
 
   if weight_type == "EXPLICIT" && haskey(_dict,"EDGE_WEIGHT_SECTION")
     explicits = float(split(_dict["EDGE_WEIGHT_SECTION"]))
-    weights = build_weights(_dict["EDGE_WEIGHT_FORMAT"],explicits)
+    weights = explicit_weights(_dict["EDGE_WEIGHT_FORMAT"],explicits)
     nodes = zeros(dimension,2)
   elseif haskey(_dict,"NODE_COORD_SECTION")
     coords = float(split(_dict["NODE_COORD_SECTION"]))
