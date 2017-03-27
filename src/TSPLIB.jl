@@ -9,5 +9,6 @@ module TSPLIB
   include("reader.jl")
   include("distances.jl")
   include("utils.jl")
+  include("fitness.jl")
 
 end # module
