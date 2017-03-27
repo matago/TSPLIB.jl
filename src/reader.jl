@@ -71,14 +71,17 @@ function keyextract{T<:AbstractString}(raw::T,ks::Array{T})
 end
 
 
-function explicit_weights(key::AbstractString,data::Vector{AbstractFloat})
+function explicit_weights(key::AbstractString,data::Vector{Float64})
   w = @match key begin
     "UPPER_DIAG_ROW" => vec2UTbyRow(data)
     "LOWER_DIAG_ROW" => vec2LTbyRow(data)
     "UPPER_DIAG_COL" => vec2UTbyCol(data)
     "LOWER_DIAG_COL" => vec2LTbyCol(data)
+    "FULL_MATRIX" => vec2FMbyRow(data)
   end
-  w.+=w'
+  if !in(key,["FULL_MATRIX"])
+    w.+=w'
+  end
   return w
 end
 
