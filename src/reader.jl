@@ -1,24 +1,4 @@
 
-type TSP
-  name::AbstractString
-  dimension::Integer
-  weight_type::AbstractString
-  weights::Matrix
-  nodes::Matrix
-  ffx::Function
-  pfx::Function
-end
-
-const tsplib_path = joinpath(Pkg.dir("TSPLIB"),"data","TSPLIB95","tsp")
-
-const tsp_keys = ["NAME", "TYPE", "COMMENT", "DIMENSION", "EDGE_WEIGHT_TYPE",
-                    "EDGE_WEIGHT_FORMAT", "EDGE_DATA_FORMAT", "NODE_COORD_TYPE",
-                    "DISPLAY_DATA_TYPE", "NODE_COORD_SECTION", "DEPOT_SECTION",
-                    "DEMAND_SECTION", "EDGE_DATA_SECTION", "FIXED_EDGES_SECTION",
-                    "DISPLAY_DATA_SECTION", "TOUR_SECTION", "EDGE_WEIGHT_SECTION",
-                    "EOF"]
-
-
 function readTSP(path::AbstractString)
   raw = readstring(path)
   return _generateTSP(raw)
@@ -35,11 +15,20 @@ function _generateTSP(raw::AbstractString)
   name = _dict["NAME"]
   dimension = convert(Integer,float(_dict["DIMENSION"]))
   weight_type = _dict["EDGE_WEIGHT_TYPE"]
+  dxp = false
 
   if weight_type == "EXPLICIT" && haskey(_dict,"EDGE_WEIGHT_SECTION")
     explicits = float(split(_dict["EDGE_WEIGHT_SECTION"]))
     weights = explicit_weights(_dict["EDGE_WEIGHT_FORMAT"],explicits)
-    nodes = zeros(dimension,2)
+    #Push display data to nodes if possible
+    if haskey(_dict,"DISPLAY_DATA_SECTION")
+      coords = float(split(_dict["DISPLAY_DATA_SECTION"]))
+      n_r = convert(Integer,length(coords)/dimension)
+      nodes = reshape(coords,(n_r,dimension))'[:,2:end]
+      dxp = true
+    else
+      nodes = zeros(dimension,2)
+    end
   elseif haskey(_dict,"NODE_COORD_SECTION")
     coords = float(split(_dict["NODE_COORD_SECTION"]))
     n_r = convert(Integer,length(coords)/dimension)
@@ -50,7 +39,7 @@ function _generateTSP(raw::AbstractString)
   fFX = fullFit(weights)
   pFX = partFit(weights)
 
-  TSP(name,dimension,weight_type,weights,nodes,fFX,pFX)
+  TSP(name,dimension,weight_type,weights,nodes,dxp,fFX,pFX)
 end
 
 function keyextract{T<:AbstractString}(raw::T,ks::Array{T})
@@ -73,10 +62,11 @@ end
 
 function explicit_weights(key::AbstractString,data::Vector{Float64})
   w = @match key begin
-    "UPPER_DIAG_ROW" => vec2UTbyRow(data)
-    "LOWER_DIAG_ROW" => vec2LTbyRow(data)
-    "UPPER_DIAG_COL" => vec2UTbyCol(data)
-    "LOWER_DIAG_COL" => vec2LTbyCol(data)
+    "UPPER_DIAG_ROW" => vec2UDTbyRow(data)
+    "LOWER_DIAG_ROW" => vec2LDTbyRow(data)
+    "UPPER_DIAG_COL" => vec2UDTbyCol(data)
+    "LOWER_DIAG_COL" => vec2LDTbyCol(data)
+    "UPPER_ROW" => vec2UTbyRow(data)
     "FULL_MATRIX" => vec2FMbyRow(data)
   end
   if !in(key,["FULL_MATRIX"])
