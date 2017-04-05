@@ -4,7 +4,7 @@ module TSPLIB
   #test
 
 
-  export TSP, readTSP, readTSPLIB
+  export TSP, readTSP, readTSPLIB, TSPLIB95_path, findTSP
 
   type TSP
     name::AbstractString
@@ -17,7 +17,7 @@ module TSPLIB
     pfx::Function
   end
 
-  const tsplib_path = joinpath(Pkg.dir("TSPLIB"),"data","TSPLIB95","tsp")
+  const TSPLIB95_path = joinpath(Pkg.dir("TSPLIB"),"data","TSPLIB95","tsp")
 
   const tsp_keys = ["NAME",
                     "TYPE",
@@ -44,3 +44,4 @@ module TSPLIB
   include("fitness.jl")
 
 end # module
+

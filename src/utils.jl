@@ -45,3 +45,15 @@ function vec2FMbyRow{T}(v::AbstractVector{T}, z::T=zero(T))
     k=0
     [(k+=1; v[k]) for i=1:s, j=1:s]
 end
+
+function findTSP(path::AbstractString)
+  if isdir(path)
+    syms = [Symbol(split(file,".")[1]) for file
+            in readdir(path)
+            if (split(file,".")[end] == "tsp")]
+  else
+    error("Not a valid directory")
+  end
+  return syms
+end
+

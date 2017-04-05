@@ -5,7 +5,7 @@ function readTSP(path::AbstractString)
 end
 
 function readTSPLIB(path::Symbol)
-  raw = readstring(joinpath(tsplib_path,string(path)*".tsp"))
+  raw = readstring(joinpath(TSPLIB95_path,string(path)*".tsp"))
   return _generateTSP(raw)
 end
 
