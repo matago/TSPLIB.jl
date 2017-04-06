@@ -48,9 +48,7 @@ end
 
 function findTSP(path::AbstractString)
   if isdir(path)
-    syms = [Symbol(split(file,".")[1]) for file
-            in readdir(path)
-            if (split(file,".")[end] == "tsp")]
+    syms = [symbol(split(file,".")[1]) for file in readdir(path) if (split(file,".")[end] == "tsp")]
   else
     error("Not a valid directory")
   end
