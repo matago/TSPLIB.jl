@@ -1,11 +1,13 @@
 
 function readTSP(path::AbstractString)
   raw = readstring(path)
+  checkEOF(raw)
   return _generateTSP(raw)
 end
 
 function readTSPLIB(path::Symbol)
   raw = readstring(joinpath(TSPLIB95_path,string(path)*".tsp"))
+  checkEOF(raw)
   return _generateTSP(raw)
 end
 
@@ -84,4 +86,12 @@ function calc_weights(key::AbstractString,data::Matrix)
   end
 
   return w
+end
+
+function checkEOF(raw::AbstractString)
+  n = rsearchindex(raw,"EOF")
+  if n == 0
+    throw("EOF not found")
+  end
+  return
 end
