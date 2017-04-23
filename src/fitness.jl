@@ -9,7 +9,7 @@ function fullFit(costs::Matrix{Float64})
     #distance = weights[from,to] (from,to) in tour
     distance = costs[tour[N],tour[1]]
     for i in 1:N-1
-      distance += costs[tour[i],tour[i+1]]
+      @inbounds distance += costs[tour[i],tour[i+1]]
     end
     return distance
   end
@@ -23,7 +23,7 @@ function partFit(costs::Matrix{Float64})
     #distance = weights[from,to] (from,to) in tour
     distance = n == N ? costs[tour[N],tour[1]] : zero(Float64)
     for i in 1:n-1
-      distance += costs[tour[i],tour[i+1]]
+      @inbounds distance += costs[tour[i],tour[i+1]]
     end
     return distance
   end
