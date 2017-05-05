@@ -40,8 +40,9 @@ function _generateTSP(raw::AbstractString)
 
   fFX = fullFit(weights)
   pFX = partFit(weights)
+  optimal = Optimals[Symbol(name)]
 
-  TSP(name,dimension,weight_type,weights,nodes,dxp,fFX,pFX)
+  TSP(name,dimension,weight_type,weights,nodes,dxp,fFX,pFX,optimal)
 end
 
 function keyextract{T<:AbstractString}(raw::T,ks::Array{T})

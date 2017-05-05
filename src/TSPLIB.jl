@@ -4,7 +4,7 @@ module TSPLIB
   #test
 
 
-  export TSP, readTSP, readTSPLIB, TSPLIB95_path, findTSP
+  export TSP, readTSP, readTSPLIB, TSPLIB95_path, findTSP, Optimals
 
   type TSP
     name::AbstractString
@@ -15,6 +15,7 @@ module TSPLIB
     Dnodes::Bool
     ffx::Function
     pfx::Function
+    optimal::Float64
   end
 
   const TSPLIB95_path = joinpath(Pkg.dir("TSPLIB"),"data","TSPLIB95","tsp")
@@ -42,6 +43,7 @@ module TSPLIB
   include("distances.jl")
   include("utils.jl")
   include("fitness.jl")
+  include("optimals.jl")
 
 end # module
 
