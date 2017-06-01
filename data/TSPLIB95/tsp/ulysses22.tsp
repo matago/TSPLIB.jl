@@ -1,4 +1,4 @@
-NAME: ulysses22.tsp
+NAME: ulysses22
 TYPE: TSP
 COMMENT: Odyssey of Ulysses (Groetschel/Padberg)
 DIMENSION: 22
