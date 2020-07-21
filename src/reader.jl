@@ -45,7 +45,7 @@ function _generateTSP(raw::AbstractString)
   TSP(name,dimension,weight_type,weights,nodes,dxp,fFX,pFX,optimal)
 end
 
-function keyextract{T<:AbstractString}(raw::T,ks::Array{T})
+function keyextract(raw::T,ks::Array{T}) where T<:AbstractString
   pq = PriorityQueue{T,Tuple{Integer,Integer},Base.Order.ForwardOrdering}()
   vals = Dict{T,T}()
   for k in ks
