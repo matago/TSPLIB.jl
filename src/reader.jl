@@ -1,30 +1,25 @@
 
 function readTSP(path::AbstractString)
-  raw = readstring(path)
+  raw = read(path, String)
   checkEOF(raw)
   return _generateTSP(raw)
 end
 
-function readTSPLIB(path::Symbol)
-  raw = readstring(joinpath(TSPLIB95_path,string(path)*".tsp"))
-  checkEOF(raw)
-  return _generateTSP(raw)
-end
-
+readTSPLIB(instance::Symbol) = readTSP(joinpath(TSPLIB95_path,string(instance)*".tsp"))
 
 function _generateTSP(raw::AbstractString)
   _dict = keyextract(raw, tsp_keys)
   name = _dict["NAME"]
-  dimension = convert(Integer,float(_dict["DIMENSION"]))
+  dimension = parse(Int,_dict["DIMENSION"])
   weight_type = _dict["EDGE_WEIGHT_TYPE"]
   dxp = false
 
   if weight_type == "EXPLICIT" && haskey(_dict,"EDGE_WEIGHT_SECTION")
-    explicits = float(split(_dict["EDGE_WEIGHT_SECTION"]))
+    explicits = parse.(Float64, split(_dict["EDGE_WEIGHT_SECTION"]))
     weights = explicit_weights(_dict["EDGE_WEIGHT_FORMAT"],explicits)
     #Push display data to nodes if possible
     if haskey(_dict,"DISPLAY_DATA_SECTION")
-      coords = float(split(_dict["DISPLAY_DATA_SECTION"]))
+      coords = parse.(Float64, split(_dict["DISPLAY_DATA_SECTION"]))
       n_r = convert(Integer,length(coords)/dimension)
       nodes = reshape(coords,(n_r,dimension))'[:,2:end]
       dxp = true
@@ -32,32 +27,33 @@ function _generateTSP(raw::AbstractString)
       nodes = zeros(dimension,2)
     end
   elseif haskey(_dict,"NODE_COORD_SECTION")
-    coords = float(split(_dict["NODE_COORD_SECTION"]))
+    coords = parse.(Float64, split(_dict["NODE_COORD_SECTION"]))
     n_r = convert(Integer,length(coords)/dimension)
     nodes = reshape(coords,(n_r,dimension))'[:,2:end]
     weights = calc_weights(_dict["EDGE_WEIGHT_TYPE"],nodes)
   end
 
-  fFX = fullFit(weights)
-  pFX = partFit(weights)
+  #fFX = fullFit(weights)
+  #pFX = partFit(weights)
   optimal = Optimals[Symbol(name)]
 
-  TSP(name,dimension,weight_type,weights,nodes,dxp,fFX,pFX,optimal)
+  #TSP(name,dimension,weight_type,weights,nodes,dxp,fFX,pFX,optimal)
+  TSP(name,dimension,weight_type,weights,nodes,dxp,optimal)
 end
 
 function keyextract(raw::T,ks::Array{T}) where T<:AbstractString
-  pq = PriorityQueue{T,Tuple{Integer,Integer},Base.Order.ForwardOrdering}()
+  pq = PriorityQueue{T,Tuple{Integer,Integer}}()
   vals = Dict{T,T}()
   for k in ks
-    idx = search(raw,k)
-    length(idx) > 0 && enqueue!(pq,k,extrema(idx))
+    idx = findfirst(k,raw)
+    idx != nothing && enqueue!(pq,k,extrema(idx))
   end
   while length(pq) > 1
     s_key, s_pts = peek(pq)
     dequeue!(pq)
     f_key, f_pts = peek(pq)
     rng = (s_pts[2]+1):(f_pts[1]-1)
-    vals[s_key] = strip(replace(raw[rng],":",""))
+    vals[s_key] = strip(replace(raw[rng],":"=>""))
   end
   return vals
 end
@@ -90,8 +86,8 @@ function calc_weights(key::AbstractString,data::Matrix)
 end
 
 function checkEOF(raw::AbstractString)
-  n = rsearchindex(raw,"EOF")
-  if n == 0
+  n = findlast("EOF",raw)
+  if n == nothing
     throw("EOF not found")
   end
   return

@@ -3,7 +3,7 @@ and returns a function that evaluates the fitness of a single path=#
 
 function fullFit(costs::Matrix{Float64})
   N = size(costs,1)
-  function fFit{T <: Integer}(tour::Vector{T})
+  @eval function fFit(tour::Vector{T}) where T<:Integer
     @assert length(tour) == N "Tour must be of length $N"
     @assert isperm(tour) "Not a valid tour, not a permutation"
     #distance = weights[from,to] (from,to) in tour
@@ -18,7 +18,7 @@ end
 
 function partFit(costs::Matrix{Float64})
   N = size(costs,1)
-  function pFit{T <: Integer}(tour::Vector{T})
+  @eval function pFit(tour::Vector{T}) where T<:Integer
     n = length(tour)
     #distance = weights[from,to] (from,to) in tour
     distance = n == N ? costs[tour[N],tour[1]] : zero(Float64)
@@ -29,4 +29,3 @@ function partFit(costs::Matrix{Float64})
   end
   return pFit
 end
-

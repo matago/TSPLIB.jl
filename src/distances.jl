@@ -46,7 +46,7 @@ function geo(x::Vector{T},y::Vector{T}) where T<:Real
   RRR = 6378.388
   nsz = length(x)
   dist = zeros(T,nsz,nsz)
-  degs = trunc(hcat(x,y))
+  degs = trunc.(hcat(x,y))
   mins = hcat(x,y).-degs
   coords = PI.*(degs.+(5.0.*(mins./3.0)))./180.0
   lat = coords[:,1]

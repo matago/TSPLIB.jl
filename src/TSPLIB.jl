@@ -1,8 +1,6 @@
 module TSPLIB
   using DataStructures
   using Match
-  #test
-
 
   export TSP, readTSP, readTSPLIB, TSPLIB95_path, findTSP, Optimals
 
@@ -13,13 +11,12 @@ module TSPLIB
     weights::Matrix
     nodes::Matrix
     Dnodes::Bool
-    ffx::Function
-    pfx::Function
+    #ffx::Function
+    #pfx::Function
     optimal::Float64
   end
 
-  #const TSPLIB95_path = joinpath(Pkg.dir("TSPLIB"),"data","TSPLIB95","tsp")
-  const TSPLIB95_path = joinpath("/Users/krislock/Downloads/TSPLIB.jl","data","TSPLIB95","tsp")
+  const TSPLIB95_path = joinpath(pkgdir(TSPLIB), "data", "TSPLIB95", "tsp")
 
   const tsp_keys = ["NAME",
                     "TYPE",
