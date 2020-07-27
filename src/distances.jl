@@ -1,6 +1,6 @@
 
-function euclidian{T<:Real}(x::Vector{T},y::Vector{T})
-  const nsz = length(x)
+function euclidian(x::Vector{T},y::Vector{T}) where T<:Real
+  nsz = length(x)
   dist = zeros(T,nsz,nsz)
 
   for i in 1:nsz, j in 1:nsz
@@ -13,8 +13,8 @@ function euclidian{T<:Real}(x::Vector{T},y::Vector{T})
   return dist
 end
 
-function att_euclidian{T<:Real}(x::Vector{T},y::Vector{T})
-  const nsz = length(x)
+function att_euclidian(x::Vector{T},y::Vector{T}) where T<:Real
+  nsz = length(x)
   dist = zeros(T,nsz,nsz)
 
   for i in 1:nsz, j in 1:nsz
@@ -27,8 +27,8 @@ function att_euclidian{T<:Real}(x::Vector{T},y::Vector{T})
   return dist
 end
 
-function ceil_euclidian{T<:Real}(x::Vector{T},y::Vector{T})
-  const nsz = length(x)
+function ceil_euclidian(x::Vector{T},y::Vector{T}) where T<:Real
+  nsz = length(x)
   dist = zeros(T,nsz,nsz)
 
   for i in 1:nsz, j in 1:nsz
@@ -41,16 +41,16 @@ function ceil_euclidian{T<:Real}(x::Vector{T},y::Vector{T})
   return dist
 end
 
-function geo{T<:Real}(x::Vector{T},y::Vector{T})
-  const PI = 3.141592
-  const RRR = 6378.388
-  const nsz = length(x)
+function geo(x::Vector{T},y::Vector{T}) where T<:Real
+  PI = 3.141592
+  RRR = 6378.388
+  nsz = length(x)
   dist = zeros(T,nsz,nsz)
-  const degs = trunc(hcat(x,y))
-  const mins = hcat(x,y).-degs
-  const coords = PI.*(degs.+(5.0.*(mins./3.0)))./180.0
-  const lat = coords[:,1]
-  const lon = coords[:,2]
+  degs = trunc.(hcat(x,y))
+  mins = hcat(x,y).-degs
+  coords = PI.*(degs.+(5.0.*(mins./3.0)))./180.0
+  lat = coords[:,1]
+  lon = coords[:,2]
 
   for i in 1:nsz, j in 1:nsz
     if i<=j

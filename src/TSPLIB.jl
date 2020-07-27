@@ -1,12 +1,10 @@
 module TSPLIB
   using DataStructures
   using Match
-  #test
-
 
   export TSP, readTSP, readTSPLIB, TSPLIB95_path, findTSP, Optimals
 
-  type TSP
+  struct TSP
     name::AbstractString
     dimension::Integer
     weight_type::AbstractString
@@ -18,7 +16,7 @@ module TSPLIB
     optimal::Float64
   end
 
-  const TSPLIB95_path = joinpath(Pkg.dir("TSPLIB"),"data","TSPLIB95","tsp")
+  const TSPLIB95_path = joinpath(pkgdir(TSPLIB), "data", "TSPLIB95", "tsp")
 
   const tsp_keys = ["NAME",
                     "TYPE",
@@ -46,4 +44,3 @@ module TSPLIB
   include("optimals.jl")
 
 end # module
-
