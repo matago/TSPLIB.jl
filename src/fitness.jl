@@ -1,7 +1,7 @@
 #=Generator function for TSP that takes the weight Matrix
 and returns a function that evaluates the fitness of a single path=#
 
-function fullFit(costs::Matrix{Float64})
+function fullFit(costs::AbstractMatrix{Float64})
   N = size(costs,1)
   @eval function fFit(tour::Vector{T}) where T<:Integer
     @assert length(tour) == N "Tour must be of length $N"
@@ -16,7 +16,7 @@ function fullFit(costs::Matrix{Float64})
   return fFit
 end
 
-function partFit(costs::Matrix{Float64})
+function partFit(costs::AbstractMatrix{Float64})
   N = size(costs,1)
   @eval function pFit(tour::Vector{T}) where T<:Integer
     n = length(tour)

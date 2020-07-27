@@ -11,8 +11,8 @@ module TSPLIB
     weights::Matrix
     nodes::Matrix
     Dnodes::Bool
-    #ffx::Function
-    #pfx::Function
+    ffx::Function
+    pfx::Function
     optimal::Float64
   end
 
@@ -40,7 +40,7 @@ module TSPLIB
   include("reader.jl")
   include("distances.jl")
   include("utils.jl")
-  #include("fitness.jl")
+  include("fitness.jl")
   include("optimals.jl")
 
 end # module

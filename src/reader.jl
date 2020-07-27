@@ -33,12 +33,11 @@ function _generateTSP(raw::AbstractString)
     weights = calc_weights(_dict["EDGE_WEIGHT_TYPE"],nodes)
   end
 
-  #fFX = fullFit(weights)
-  #pFX = partFit(weights)
+  fFX = fullFit(weights)
+  pFX = partFit(weights)
   optimal = Optimals[Symbol(name)]
 
-  #TSP(name,dimension,weight_type,weights,nodes,dxp,fFX,pFX,optimal)
-  TSP(name,dimension,weight_type,weights,nodes,dxp,optimal)
+  TSP(name,dimension,weight_type,weights,nodes,dxp,fFX,pFX,optimal)
 end
 
 function keyextract(raw::T,ks::Array{T}) where T<:AbstractString
