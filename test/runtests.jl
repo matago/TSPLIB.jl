@@ -16,4 +16,7 @@ using Test
             @test readTSPLIB(instance).optimal == Optimals[instance]
         end
     end
+
+    tsp = readTSP(joinpath(@__DIR__, "../data/TSPLIB95/tsp/a280.tsp"))
+    @test tsp.name == "a280"
 end
