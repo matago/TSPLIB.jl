@@ -13,6 +13,34 @@ function euclidian(x::Vector{T},y::Vector{T}) where T<:Real
   return dist
 end
 
+function manhattan(x::Vector{T},y::Vector{T}) where T<:Real
+  nsz = length(x)
+  dist = zeros(T, nsz, nsz)
+
+  for i in 1:nsz, j in 1:nsz
+    if i<=j
+      xd = abs(x[i] - x[j])
+      yd = abs(y[i] - y[j])
+      dist[i, j] = dist[j, i] = round(xd + yd, RoundNearestTiesUp)
+    end
+  end
+  return dist
+end
+
+function max_norm(x::Vector{T},y::Vector{T}) where T<:Real
+  nsz = length(x)
+  dist = zeros(T, nsz, nsz)
+
+  for i in 1:nsz, j in 1:nsz
+    if i<=j
+      xd = abs(x[i] - x[j])
+      yd = abs(y[i] - y[j])
+      dist[i, j] = dist[j, i] = max(round(xd, RoundNearestTiesUp), round(yd, RoundNearestTiesUp))
+    end
+  end
+  return dist
+end
+
 function att_euclidian(x::Vector{T},y::Vector{T}) where T<:Real
   nsz = length(x)
   dist = zeros(T,nsz,nsz)
