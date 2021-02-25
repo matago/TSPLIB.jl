@@ -1,9 +1,8 @@
-# TSPLIB
+# TSPLIB.jl
 
-[![Build Status](https://travis-ci.org/matago/TSPLIB.jl.svg?branch=master)](https://travis-ci.org/matago/TSPLIB.jl)
+[![Build Status](https://github.com/matago/TSPLIB.jl/workflows/CI/badge.svg?branch=master)](https://github.com/matago/TSPLIB.jl/actions?query=workflow%3ACI)
+[![codecov](https://codecov.io/gh/matago/TSPLIB.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/matago/TSPLIB.jl)
 
-[![Coverage Status](https://coveralls.io/repos/matago/TSPLIB.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/matago/TSPLIB.jl?branch=master)
+[TSPLIB format](http://webhotel4.ruc.dk/~keld/research/LKH/LKH-2.0/DOC/TSPLIB_DOC.pdf) datafile reader
 
-[![codecov.io](http://codecov.io/github/matago/TSPLIB.jl/coverage.svg?branch=master)](http://codecov.io/github/matago/TSPLIB.jl?branch=master)
 
-TEST
