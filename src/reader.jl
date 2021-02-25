@@ -30,12 +30,17 @@ function _generateTSP(raw::AbstractString)
     coords = parse.(Float64, split(_dict["NODE_COORD_SECTION"]))
     n_r = convert(Integer,length(coords)/dimension)
     nodes = reshape(coords,(n_r,dimension))'[:,2:end]
-    weights = calc_weights(_dict["EDGE_WEIGHT_TYPE"],nodes)
+    weights = calc_weights(_dict["EDGE_WEIGHT_TYPE"], nodes)
   end
 
   fFX = fullFit(weights)
   pFX = partFit(weights)
-  optimal = Optimals[Symbol(name)]
+
+  if haskey(Optimals, Symbol(name))
+    optimal = Optimals[Symbol(name)]
+  else
+    optimal = -1
+  end
 
   TSP(name,dimension,weight_type,weights,nodes,dxp,fFX,pFX,optimal)
 end
@@ -60,12 +65,12 @@ end
 
 function explicit_weights(key::AbstractString,data::Vector{Float64})
   w = @match key begin
-    "UPPER_DIAG_ROW" => vec2UDTbyRow(data)
-    "LOWER_DIAG_ROW" => vec2LDTbyRow(data)
-    "UPPER_DIAG_COL" => vec2UDTbyCol(data)
-    "LOWER_DIAG_COL" => vec2LDTbyCol(data)
-    "UPPER_ROW" => vec2UTbyRow(data)
-    "FULL_MATRIX" => vec2FMbyRow(data)
+    "UPPER_DIAG_ROW"  => vec2UDTbyRow(data)
+    "LOWER_DIAG_ROW"  => vec2LDTbyRow(data)
+    "UPPER_DIAG_COL"  => vec2UDTbyCol(data)
+    "LOWER_DIAG_COL"  => vec2LDTbyCol(data)
+    "UPPER_ROW"       => vec2UTbyRow(data)
+    "FULL_MATRIX"     => vec2FMbyRow(data)
   end
   if !in(key,["FULL_MATRIX"])
     w.+=w'
@@ -73,12 +78,15 @@ function explicit_weights(key::AbstractString,data::Vector{Float64})
   return w
 end
 
-function calc_weights(key::AbstractString,data::Matrix)
+function calc_weights(key::AbstractString, data::Matrix)
   w = @match key begin
-    "EUC_2D" => euclidian(data[:,1], data[:,2])
-    "GEO" => geo(data[:,1], data[:,2])
-    "ATT" => att_euclidian(data[:,1], data[:,2])
+    "EUC_2D"  => euclidian(data[:,1], data[:,2])
+    "MAN_2D"  => manhattan(data[:,1], data[:,2])
+    "MAX_2D"  => max_norm(data[:,1], data[:,2])
+    "GEO"     => geo(data[:,1], data[:,2])
+    "ATT"     => att_euclidian(data[:,1], data[:,2])
     "CEIL_2D" => ceil_euclidian(data[:,1], data[:,2])
+    _         => error("Distance function type $key is not supported.")
   end
 
   return w
