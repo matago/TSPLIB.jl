@@ -19,6 +19,11 @@ struct TSP
 end
 ```
 
+To install:
+```julia
+] add TSPLIB
+```
+
 Some TSP instances in the [TSPLIB](http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsplib.html) library are preloaded. See the [list](https://github.com/matago/TSPLIB.jl/tree/master/data/TSPLIB95/tsp).
 
 For example, to load `a280.tsp`, you can do:
