@@ -86,7 +86,7 @@ function geo(x::Vector{T},y::Vector{T}) where T<:Real
       q2 = cos(lat[i]-lat[j])
       q3 = cos(lat[i]+lat[j])
       dij = RRR.*acos(0.5.*((1.0.+q1).*q2.-(1.0.-q1).*q3)).+1.0
-      dist[i,j] = dist[j,i] = round(dij,RoundNearestTiesUp)
+      dist[i,j] = dist[j,i] = floor(dij)
     end
   end
   return dist
