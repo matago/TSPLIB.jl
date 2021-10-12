@@ -70,6 +70,7 @@ function explicit_weights(key::AbstractString,data::Vector{Float64})
     "UPPER_DIAG_COL"  => vec2UDTbyCol(data)
     "LOWER_DIAG_COL"  => vec2LDTbyCol(data)
     "UPPER_ROW"       => vec2UTbyRow(data)
+    "LOWER_ROW"       => vec2LTbyRow(data)        
     "FULL_MATRIX"     => vec2FMbyRow(data)
   end
   if !in(key,["FULL_MATRIX"])
