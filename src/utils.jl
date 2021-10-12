@@ -38,6 +38,14 @@ function vec2UTbyRow(v::AbstractVector{T}, z::T=zero(T)) where T
     [i>j ? (k+=1; v[k]) : z for i=1:s, j=1:s]'
 end
 
+function vec2LTbyRow(v::AbstractVector{T}, z::T=zero(T)) where T
+    n = length(v)
+    s = round(Integer,((sqrt(8n+1)-1)/2)+1)
+    (s*(s+1)/2)-s == n || error("vec2LTbyRow: length of vector is not triangular")
+    k=0
+    [i<j ? (k+=1; v[k]) : z for i=1:s, j=1:s]'
+end
+
 function vec2FMbyRow(v::AbstractVector{T}, z::T=zero(T)) where T
     n = length(v)
     s = round(Int,sqrt(n))
