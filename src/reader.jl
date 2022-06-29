@@ -1,5 +1,9 @@
 
 function readTSP(path::AbstractString)
+  if !isfile(path)
+      println("File $path not found!")
+      return nothing
+  end
   raw = read(path, String)
   checkEOF(raw)
   return _generateTSP(raw)
@@ -50,7 +54,7 @@ function keyextract(raw::T,ks::Array{T}) where T<:AbstractString
   vals = Dict{T,T}()
   for k in ks
     idx = findfirst(k,raw)
-    idx != nothing && enqueue!(pq,k,extrema(idx))
+    idx !== nothing && enqueue!(pq,k,extrema(idx))
   end
   while length(pq) > 1
     s_key, s_pts = peek(pq)
@@ -62,7 +66,6 @@ function keyextract(raw::T,ks::Array{T}) where T<:AbstractString
   return vals
 end
 
-
 function explicit_weights(key::AbstractString,data::Vector{Float64})
   w = @match key begin
     "UPPER_DIAG_ROW"  => vec2UDTbyRow(data)
@@ -70,7 +73,7 @@ function explicit_weights(key::AbstractString,data::Vector{Float64})
     "UPPER_DIAG_COL"  => vec2UDTbyCol(data)
     "LOWER_DIAG_COL"  => vec2LDTbyCol(data)
     "UPPER_ROW"       => vec2UTbyRow(data)
-    "LOWER_ROW"       => vec2LTbyRow(data)        
+    "LOWER_ROW"       => vec2LTbyRow(data)
     "FULL_MATRIX"     => vec2FMbyRow(data)
   end
   if !in(key,["FULL_MATRIX"])
@@ -95,8 +98,8 @@ end
 
 function checkEOF(raw::AbstractString)
   n = findlast("EOF",raw)
-  if n == nothing
-    throw("EOF not found")
+  if n === nothing
+    error("EOF not found")
   end
   return
 end
