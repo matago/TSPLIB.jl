@@ -16,6 +16,16 @@ module TSPLIB
     optimal::Float64
   end
 
+  function Base.show(io::IO, data::TSP)
+    print(io, "TSP data $(data.name)")
+    print(io, " ($(data.dimension) nodes,")
+    if data.optimal != -1
+        print(io, " opt = $(data.optimal))")
+    else
+        print(io, " no optimal)")
+    end
+  end
+
   const TSPLIB95_path = joinpath(pkgdir(TSPLIB), "data", "TSPLIB95", "tsp")
 
   const tsp_keys = ["NAME",
